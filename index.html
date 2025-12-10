@@ -48,13 +48,9 @@
             z-index: 1000; border-bottom: 1px solid rgba(253, 224, 71, 0.1);
         }
         
-        /* LOGO NO HEADER */
-        .logo-img {
-            height: 50px; /* Altura ajustada para o menu */
-            width: auto;
-            object-fit: contain;
-            filter: drop-shadow(0 0 5px rgba(253,224,71,0.3)); /* Brilho sutil dourado */
-        }
+        .logo-container { display: flex; align-items: center; gap: 10px; }
+        .logo-img { height: 40px; width: auto; object-fit: contain; }
+        .logo-text-fallback { font-family: 'Playfair Display', serif; font-weight: 700; font-size: 18px; color: var(--gold-primary); text-transform: uppercase; letter-spacing: 1px; }
 
         nav ul { list-style: none; display: flex; gap: 20px; margin: 0; padding: 0; }
         nav a { color: var(--text-white); text-decoration: none; font-size: 13px; font-weight: 600; text-transform: uppercase; transition: 0.3s; }
@@ -62,7 +58,7 @@
         .header-cta { background: var(--gold-primary); color: var(--navy-bg); padding: 8px 18px; border-radius: 30px; text-decoration: none; font-weight: 700; font-size: 13px; }
 
         /* --- SEÇÕES --- */
-        section { padding: 80px 5%; max-width: 1200px; margin: 0 auto; display: flex; flex-direction: column; align-items: center; }
+        section { padding: 80px 5%; max-width: 1200px; margin: 0 auto; display: flex; flex-direction: column; align-items: center; position: relative; z-index: 1; }
         
         .reveal { opacity: 0; transform: translateY(30px); transition: all 0.8s ease-out; }
         .reveal.active { opacity: 1; transform: translateY(0); }
@@ -75,28 +71,46 @@
 
         p { font-size: 18px; line-height: 1.7; color: var(--text-gray); margin-bottom: 15px; }
 
-        /* --- HERO (CAPA) --- */
-        #hero { min-height: 90vh; text-align: center; justify-content: center; padding-top: 100px; }
+        /* --- HERO --- */
+        #hero {
+            position: relative; width: 100vw; height: 100vh;
+            display: flex; justify-content: center; align-items: center;
+            overflow: hidden; padding: 0;
+        }
         
-        /* LOGO NA CAPA (Maior) */
-        .hero-logo-large {
-            max-width: 250px;
-            height: auto;
-            margin-bottom: 30px;
-            filter: drop-shadow(0 0 20px var(--gold-glow));
-            animation: float 3s ease-in-out infinite;
+        /* ANIMAÇÃO GLITTER GLOBAL */
+        .particles {
+            position: fixed; /* Fixa na tela toda */
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='10' cy='10' r='1' fill='%23fde047' fill-opacity='0.2'/%3E%3Ccircle cx='50' cy='50' r='2' fill='%23fde047' fill-opacity='0.1'/%3E%3Ccircle cx='80' cy='20' r='1' fill='%23fde047' fill-opacity='0.2'/%3E%3C/svg%3E");
+            animation: drift 20s linear infinite; 
+            z-index: 0; /* Fica atrás do conteúdo */
+            opacity: 0.5;
+            pointer-events: none; /* Permite clicar através dela */
         }
 
-        #hero h1 { font-family: 'Playfair Display', serif; font-size: 58px; line-height: 1.1; margin: 20px 0; color: #fff; }
-        #hero h1 span { color: var(--gold-primary); display: block; }
-        .hero-btn { border: 2px solid var(--gold-primary); color: var(--gold-primary); padding: 12px 35px; border-radius: 50px; text-decoration: none; font-weight: 700; transition: 0.3s; text-transform: uppercase; letter-spacing: 1px; }
+        .scene { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center; opacity: 0; z-index: 1; padding: 20px; text-align: center; }
+        .intro-scene { animation: fadeIntro 4s ease-in-out forwards; }
+        #scene-1 { animation-delay: 0.5s; }
+        #scene-2 { animation-delay: 4.5s; }
+        #scene-3 { animation-delay: 8.5s; }
+        #scene-final { animation: fadeFinal 2s ease-out forwards; animation-delay: 12.5s; pointer-events: auto; }
+        
+        .anim-text { font-size: 1.5rem; color: #fff; letter-spacing: 4px; text-transform: uppercase; margin-bottom: 10px; }
+        .anim-title { font-family: 'Playfair Display', serif; font-size: 4rem; color: var(--gold-primary); line-height: 1.1; margin: 0; text-shadow: 0 0 30px rgba(253, 224, 71, 0.4); }
+        .highlight { color: #fff; font-style: italic; }
+        .big-icon { font-size: 5rem; color: var(--gold-primary); margin-bottom: 20px; filter: drop-shadow(0 0 20px rgba(253, 224, 71, 0.6)); }
+        
+        .hero-logo-large { max-width: 250px; height: auto; margin-bottom: 30px; filter: drop-shadow(0 0 20px var(--gold-glow)); animation: float 3s ease-in-out infinite; }
+        .hero-btn { border: 2px solid var(--gold-primary); color: var(--gold-primary); padding: 15px 40px; font-size: 18px; border-radius: 50px; text-decoration: none; font-weight: 700; transition: 0.3s; text-transform: uppercase; letter-spacing: 1px; margin-top: 30px; background: rgba(0,0,0,0.3); cursor: pointer; }
         .hero-btn:hover { background: var(--gold-primary); color: var(--navy-bg); box-shadow: 0 0 20px var(--gold-primary); }
+        .progress-line { position: absolute; bottom: 0; left: 0; height: 3px; background: var(--gold-primary); width: 0; animation: progress 12.5s linear forwards; z-index: 10; }
 
-        /* --- GRID GERAL --- */
+        /* --- GRID & CARDS --- */
         .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 50px; align-items: center; width: 100%; }
         .image-card { border-radius: 16px; overflow: hidden; box-shadow: 0 20px 50px rgba(0,0,0,0.5); border: 1px solid rgba(253, 224, 71, 0.2); height: 400px; }
         .image-card img { width: 100%; height: 100%; object-fit: cover; }
-
+        
         /* --- CRONOGRAMA --- */
         .timeline { display: flex; justify-content: space-between; width: 100%; position: relative; margin-top: 40px; }
         .timeline::before { content: ''; position: absolute; top: 25px; left: 0; width: 100%; height: 2px; background: rgba(253, 224, 71, 0.3); z-index: 0; }
@@ -107,35 +121,19 @@
 
         /* --- COTAS --- */
         .cotas-container { display: flex; flex-direction: column; gap: 60px; width: 100%; }
-        .cota-card {
-            display: grid; grid-template-columns: 1fr 1.5fr; gap: 40px;
-            background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.08);
-            border-radius: 16px; padding: 40px; align-items: center; position: relative; transition: transform 0.3s;
-        }
+        .cota-card { display: grid; grid-template-columns: 1fr 1.5fr; gap: 40px; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; padding: 40px; align-items: center; position: relative; transition: transform 0.3s; }
         .cota-card:hover { transform: translateY(-5px); border-color: var(--gold-primary); }
         .cota-card.reverse { direction: rtl; } .cota-card.reverse > * { direction: ltr; }
-        
-        .scarcity-badge {
-            position: absolute; top: -15px; right: 20px;
-            background: var(--danger); color: white;
-            padding: 5px 15px; border-radius: 4px;
-            font-weight: 700; font-size: 12px; letter-spacing: 1px;
-            box-shadow: 0 5px 15px rgba(239, 68, 68, 0.4);
-            animation: pulseRed 2s infinite;
-        }
-
+        .scarcity-badge { position: absolute; top: -15px; right: 20px; background: var(--danger); color: white; padding: 5px 15px; border-radius: 4px; font-weight: 700; font-size: 12px; letter-spacing: 1px; box-shadow: 0 5px 15px rgba(239, 68, 68, 0.4); animation: pulseRed 2s infinite; }
         .cota-img-container { height: 300px; display: flex; justify-content: center; align-items: center; background: radial-gradient(circle, rgba(255,255,255,0.05) 0%, transparent 70%); border-radius: 12px; border: 1px solid rgba(255,255,255,0.05); }
         .cota-img-container img { max-height: 85%; max-width: 85%; object-fit: contain; filter: drop-shadow(0 0 15px rgba(255,255,255,0.2)); }
-
         .cota-info h3 { font-family: 'Playfair Display', serif; font-size: 32px; color: var(--text-white); margin: 10px 0; }
         .feature-list { list-style: none; padding: 0; text-align: left; }
         .feature-list li { margin-bottom: 10px; position: relative; padding-left: 25px; color: var(--text-gray); font-size: 15px; }
         .feature-list li i { position: absolute; left: 0; top: 4px; color: var(--gold-primary); }
-        
         .price-badge { display: inline-block; border: 1px solid var(--gold-primary); color: var(--gold-primary); padding: 8px 20px; border-radius: 50px; font-weight: 700; font-size: 20px; margin-bottom: 20px; }
-        .cota-btn { display: inline-block; margin-top: 20px; padding: 12px 30px; border-radius: 50px; text-decoration: none; font-weight: 700; text-transform: uppercase; font-size: 14px; transition: 0.3s; }
-
-        /* Cores Cotas */
+        .cota-btn { display: inline-block; margin-top: 20px; padding: 12px 30px; border-radius: 50px; text-decoration: none; font-weight: 700; text-transform: uppercase; font-size: 14px; transition: 0.3s; cursor: pointer; }
+        
         .gold .price-badge { background: rgba(253, 224, 71, 0.1); }
         .gold .cota-btn { background: var(--gold-primary); color: #000; animation: pulseGold 2s infinite; }
         .silver .price-badge { border-color: #e2e8f0; color: #e2e8f0; background: rgba(226, 232, 240, 0.1); }
@@ -143,13 +141,12 @@
         .bronze .price-badge { border-color: #d97706; color: #d97706; background: rgba(217, 119, 6, 0.1); }
         .bronze .cota-btn { background: #d97706; color: white; }
 
-        /* --- SPECS --- */
+        /* --- SPECS & FAQ --- */
         .specs-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; width: 100%; margin-top: 40px; }
         .spec-card { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1); padding: 25px; border-radius: 10px; text-align: left; }
         .spec-card h4 { color: var(--gold-primary); margin-bottom: 15px; font-size: 18px; display: flex; align-items: center; gap: 10px; }
         .spec-card ul { padding-left: 20px; color: var(--text-gray); font-size: 14px; line-height: 1.6; margin: 0; }
-
-        /* --- FAQ --- */
+        
         .faq-container { width: 100%; max-width: 800px; margin: 0 auto; }
         .faq-item { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1); margin-bottom: 10px; border-radius: 8px; overflow: hidden; }
         .faq-item summary { padding: 15px 20px; cursor: pointer; font-weight: 600; color: var(--text-white); list-style: none; display: flex; justify-content: space-between; align-items: center; }
@@ -161,17 +158,24 @@
         /* --- CONTATO --- */
         .contact-box { background: rgba(255,255,255,0.05); padding: 40px; border-radius: 20px; border: 1px solid var(--gold-primary); text-align: center; width: 100%; max-width: 600px; }
         .big-cta { display: inline-block; background: var(--gold-primary); color: #000; padding: 15px 40px; font-size: 18px; font-weight: 700; border-radius: 50px; text-decoration: none; margin-top: 30px; animation: pulseGold 2s infinite; }
-
         footer { text-align: center; padding: 30px; font-size: 12px; color: rgba(255,255,255,0.4); border-top: 1px solid rgba(255,255,255,0.1); background: #020617; }
 
+        /* --- ANIMAÇÕES KEYFRAMES --- */
+        @keyframes drift { from { background-position: 0 0; } to { background-position: 100px 100px; } }
+        @keyframes fadeIntro { 0% { opacity: 0; transform: scale(0.9); } 20% { opacity: 1; transform: scale(1); } 80% { opacity: 1; transform: scale(1.05); } 100% { opacity: 0; transform: scale(1.1); pointer-events: none; } }
+        @keyframes fadeFinal { 0% { opacity: 0; transform: scale(0.95); } 100% { opacity: 1; transform: scale(1); } }
+        @keyframes progress { 0% { width: 0; } 100% { width: 100%; } }
+        @keyframes float { 0% { transform: translateY(0); } 50% { transform: translateY(-10px); } 100% { transform: translateY(0); } }
         @keyframes pulseGold { 0% { box-shadow: 0 0 0 0 rgba(253, 224, 71, 0.7); } 70% { box-shadow: 0 0 0 15px rgba(253, 224, 71, 0); } 100% { box-shadow: 0 0 0 0 rgba(253, 224, 71, 0); } }
         @keyframes pulseRed { 0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); } 70% { box-shadow: 0 0 0 10px rgba(239, 68, 68, 0); } 100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); } }
-        @keyframes float { 0% { transform: translateY(0); } 50% { transform: translateY(-10px); } 100% { transform: translateY(0); } }
 
         /* --- RESPONSIVIDADE --- */
         @media (max-width: 900px) {
             nav ul { display: none; }
-            #hero h1 { font-size: 40px; }
+            #hero { padding-top: 0; }
+            .anim-title { font-size: 2.5rem; }
+            .anim-text { font-size: 1rem; }
+            
             section { padding: 60px 5%; }
             .grid-2 { grid-template-columns: 1fr; gap: 40px; }
             .image-card { height: 250px; order: -1; }
@@ -189,8 +193,6 @@
             
             .contact-box { padding: 30px 20px; }
             .big-cta { font-size: 16px; width: 100%; }
-            
-            /* Ajuste do Logo Mobile */
             .logo-img { height: 40px; }
             .hero-logo-large { max-width: 180px; }
         }
@@ -198,11 +200,12 @@
 </head>
 <body>
 
+    <!-- ANIMAÇÃO DE FUNDO GLOBAL -->
+    <div class="particles"></div>
+
     <header>
-        <!-- LOGO NO HEADER -->
         <div class="logo-container">
-            <!-- ATENÇÃO: Substitua 'logo.png' pelo nome do seu arquivo de logo -->
-            <img src="logo.png" alt="Logo Voluntários Lagoinha" class="logo-img" onerror="this.style.display='none'; document.querySelector('.logo-text-fallback').style.display='block';">
+            <img src="logo.png" alt="Voluntários" class="logo-img" onerror="this.style.display='none'; document.querySelector('.logo-text-fallback').style.display='block';">
             <span class="logo-text-fallback" style="display:none; font-family:'Playfair Display'; font-weight:700; color:#fde047;">LAGOINHA GAMA</span>
         </div>
         <nav>
@@ -216,144 +219,107 @@
         <a href="#contato" class="header-cta">Falar Agora</a>
     </header>
 
+    <!-- HERO SECTION -->
     <section id="hero">
-        <!-- LOGO GRANDE NA CAPA -->
-        <!-- ATENÇÃO: Use a mesma imagem 'logo.png' aqui -->
-        <img src="logo.png" alt="Voluntários do Ano" class="hero-logo-large" onerror="this.style.display='none'; document.querySelector('.hero-icon-fallback').style.display='block';">
-        <i class="fa-solid fa-award hero-icon hero-icon-fallback" style="font-size: 70px; color: var(--gold-primary); margin-bottom: 20px; display:none;"></i>
-        
-        <h1>Premiação<br><span>Voluntários do Ano</span></h1>
-        <p style="font-size: 18px; letter-spacing: 2px; color: var(--text-gray); margin-bottom: 40px; text-transform: uppercase;">Projeto de Captação 2026</p>
-        <a href="#cotas" class="hero-btn">Ver Cotas Disponíveis</a>
+        <div class="progress-line"></div>
+        <div class="scene intro-scene" id="scene-1"><p class="anim-text">ELES CHEGAM CEDO</p><h1 class="anim-title">Servem com<br><span class="highlight">Excelência</span></h1></div>
+        <div class="scene intro-scene" id="scene-2"><p class="anim-text">ELES FICAM ATÉ O FIM</p><h1 class="anim-title">Servem com<br><span class="highlight">Amor</span></h1></div>
+        <div class="scene intro-scene" id="scene-3"><i class="fa-solid fa-hands-praying big-icon"></i><h1 class="anim-title">Chegou a hora<br>de Honrar.</h1></div>
+        <div class="scene" id="scene-final">
+            <img src="logo.png" alt="Voluntários do Ano" class="hero-logo-large" onerror="this.style.display='none'; document.querySelector('.hero-icon-fallback').style.display='block';">
+            <i class="fa-solid fa-award hero-icon hero-icon-fallback" style="font-size: 70px; color: var(--gold-primary); margin-bottom: 20px; display:none;"></i>
+            <h1 class="anim-title" style="font-size: 3.5rem;">Premiação<br><span style="color: #fff;">Voluntários do Ano</span></h1>
+            <p style="font-size: 16px; letter-spacing: 3px; color: var(--text-gray); margin-top: 20px; text-transform: uppercase;">Projeto de Captação 2026</p>
+            <a href="#cotas" class="hero-btn">Ver Cotas Disponíveis</a>
+            <div style="margin-top: 40px; font-size: 12px; color: rgba(255,255,255,0.3); letter-spacing: 2px;">ROLE PARA BAIXO</div>
+        </div>
     </section>
 
-    <!-- Resumo (Essência) -->
+    <!-- SOBRE -->
     <section id="sobre">
         <div class="grid-2 reveal">
-            <div class="image-card">
-                <img src="https://images.unsplash.com/photo-1511632765486-a01980e01a18?q=80&w=2070&auto=format&fit=crop" alt="Celebração">
-            </div>
+            <div class="image-card"><img src="https://images.unsplash.com/photo-1511632765486-a01980e01a18?q=80&w=2070&auto=format&fit=crop" alt="Celebração"></div>
             <div>
                 <h2 class="section-title" style="text-align: left; margin-bottom: 20px;">Nossa Essência</h2>
                 <p style="font-size: 22px; color: #fff; font-style: italic; margin-bottom: 20px;">"Honrar quem serve é nossa maior alegria."</p>
-                <p>A <strong>Premiação Voluntários do Ano</strong> é o momento em que a igreja para, respira e aplaude de pé aqueles que fazem tudo acontecer nos bastidores. Não é apenas um evento, é uma declaração de gratidão e pertencimento.</p>
-                <div style="margin-top: 25px; padding: 15px; border-left: 3px solid var(--gold-primary); background: rgba(255,255,255,0.05);">
-                    <strong style="color: var(--gold-primary);">PÚBLICO ESTIMADO:</strong> <br> 200 a 400 Líderes e Voluntários.
-                </div>
+                <p>A <strong>Premiação Voluntários do Ano</strong> é o momento em que a igreja para, respira e aplaude de pé aqueles que fazem tudo acontecer. Uma noite de gratidão e pertencimento.</p>
+                <div style="margin-top: 25px; padding: 15px; border-left: 3px solid var(--gold-primary); background: rgba(255,255,255,0.05);"><strong style="color: var(--gold-primary);">PÚBLICO:</strong> 200 a 400 Líderes e Voluntários.</div>
             </div>
         </div>
     </section>
 
-    <!-- Cronograma -->
+    <!-- CRONOGRAMA -->
     <section id="cronograma">
         <h2 class="section-title reveal">Cronograma Oficial</h2>
         <div class="timeline reveal">
-            <div class="timeline-item">
-                <div class="t-icon"><i class="fa-solid fa-clipboard-list"></i></div>
-                <span class="t-date">Dezembro</span>
-                <span class="t-desc">Preparação</span>
-            </div>
-            <div class="timeline-item">
-                <div class="t-icon"><i class="fa-solid fa-handshake"></i></div>
-                <span class="t-date">Até 10 Jan</span>
-                <span class="t-desc">Fechamento Cotas</span>
-            </div>
-            <div class="timeline-item">
-                <div class="t-icon"><i class="fa-solid fa-cart-shopping"></i></div>
-                <span class="t-date">10-20 Jan</span>
-                <span class="t-desc">Compras/Materiais</span>
-            </div>
-            <div class="timeline-item">
-                <div class="t-icon"><i class="fa-solid fa-hammer"></i></div>
-                <span class="t-date">20-23 Jan</span>
-                <span class="t-desc">Montagem</span>
-            </div>
-            <div class="timeline-item">
-                <div class="t-icon" style="background: var(--gold-primary); color: var(--navy-bg); border-color: #fff; box-shadow: 0 0 20px var(--gold-primary);"><i class="fa-solid fa-star"></i></div>
-                <span class="t-date" style="font-size: 20px;">24 JAN</span>
-                <span class="t-desc" style="font-weight: 700; color: #fff;">O GRANDE DIA</span>
-            </div>
+            <div class="timeline-item"><div class="t-icon"><i class="fa-solid fa-clipboard-list"></i></div><span class="t-date">Dezembro</span><span class="t-desc">Preparação</span></div>
+            <div class="timeline-item"><div class="t-icon"><i class="fa-solid fa-handshake"></i></div><span class="t-date">Até 10 Jan</span><span class="t-desc">Fechamento</span></div>
+            <div class="timeline-item"><div class="t-icon"><i class="fa-solid fa-cart-shopping"></i></div><span class="t-date">10-20 Jan</span><span class="t-desc">Compras</span></div>
+            <div class="timeline-item"><div class="t-icon"><i class="fa-solid fa-hammer"></i></div><span class="t-date">20-23 Jan</span><span class="t-desc">Montagem</span></div>
+            <div class="timeline-item"><div class="t-icon" style="background: var(--gold-primary); color: var(--navy-bg); border-color: #fff; box-shadow: 0 0 20px var(--gold-primary);"><i class="fa-solid fa-star"></i></div><span class="t-date" style="font-size: 20px;">24 JAN</span><span class="t-desc" style="font-weight: 700; color: #fff;">O EVENTO</span></div>
         </div>
     </section>
 
-    <!-- Métricas -->
+    <!-- METRICAS -->
     <section id="metricas" style="background: rgba(255,255,255,0.02);">
-        <h2 class="section-title reveal">Alcance e Visibilidade</h2>
+        <h2 class="section-title reveal">Alcance Digital</h2>
         <div class="grid-2 reveal" style="gap: 30px;">
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
-                <div style="background: rgba(255,255,255,0.05); padding: 20px; border-radius: 10px; text-align: center; border: 1px solid rgba(253,224,71,0.2);">
-                    <i class="fa-solid fa-users" style="font-size: 30px; color: var(--gold-primary);"></i>
-                    <h3 style="font-size: 24px; margin: 10px 0 0; color: #fff;">11.4k</h3>
-                    <p style="margin: 0; font-size: 12px;">Seguidores</p>
-                </div>
-                <div style="background: rgba(255,255,255,0.05); padding: 20px; border-radius: 10px; text-align: center; border: 1px solid rgba(253,224,71,0.2);">
-                    <i class="fa-solid fa-eye" style="font-size: 30px; color: var(--gold-primary);"></i>
-                    <h3 style="font-size: 24px; margin: 10px 0 0; color: #fff;">3.2k</h3>
-                    <p style="margin: 0; font-size: 12px;">Views/Post</p>
-                </div>
+                <div style="background: rgba(255,255,255,0.05); padding: 20px; border-radius: 10px; text-align: center; border: 1px solid rgba(253,224,71,0.2);"><i class="fa-solid fa-users" style="font-size: 30px; color: var(--gold-primary);"></i><h3 style="font-size: 24px; margin: 10px 0 0; color: #fff;">11.4k</h3><p style="margin: 0; font-size: 12px;">Seguidores</p></div>
+                <div style="background: rgba(255,255,255,0.05); padding: 20px; border-radius: 10px; text-align: center; border: 1px solid rgba(253,224,71,0.2);"><i class="fa-solid fa-eye" style="font-size: 30px; color: var(--gold-primary);"></i><h3 style="font-size: 24px; margin: 10px 0 0; color: #fff;">3.2k</h3><p style="margin: 0; font-size: 12px;">Views/Post</p></div>
             </div>
             <div>
-                <h3 style="color: #fff; font-size: 24px; margin-bottom: 15px;">Por que sua marca deve estar aqui?</h3>
+                <h3 style="color: #fff; font-size: 24px; margin-bottom: 15px;">Por que sua marca?</h3>
                 <ul class="feature-list">
-                    <li><i class="fa-solid fa-check"></i> <strong>Público Familiar:</strong> Conexão direta com famílias do Gama.</li>
+                    <li><i class="fa-solid fa-check"></i> <strong>Público Familiar:</strong> Conexão com famílias.</li>
                     <li><i class="fa-solid fa-check"></i> <strong>Imagem Positiva:</strong> Associação a valores nobres.</li>
-                    <li><i class="fa-solid fa-check"></i> <strong>Exposição Híbrida:</strong> Presença física e digital.</li>
+                    <li><i class="fa-solid fa-check"></i> <strong>Visibilidade Híbrida:</strong> Física e Digital.</li>
                 </ul>
             </div>
         </div>
     </section>
 
-    <!-- Cotas -->
+    <!-- COTAS -->
     <section id="cotas">
         <h2 class="section-title reveal">Cotas de Patrocínio</h2>
         <p class="reveal" style="text-align: center; max-width: 600px; margin-bottom: 40px;">Vagas limitadas para garantir exclusividade.</p>
-        
         <div class="cotas-container">
-            
             <!-- OURO -->
             <div class="cota-card gold reveal">
                 <div class="scarcity-badge"><i class="fa-solid fa-fire"></i> APENAS 3 VAGAS</div>
-                <div class="cota-img-container">
-                    <img src="https://images.unsplash.com/photo-1590059390047-6058a0650e8d?q=80&w=2574&auto=format&fit=crop" alt="Troféu Ouro">
-                </div>
+                <div class="cota-img-container"><img src="https://images.unsplash.com/photo-1590059390047-6058a0650e8d?q=80&w=2574&auto=format&fit=crop" alt="Troféu Ouro"></div>
                 <div class="cota-info">
                     <span style="background: var(--gold-primary); color: #000; padding: 4px 10px; border-radius: 4px; font-weight: bold; font-size: 10px; letter-spacing: 1px;">PREMIUM</span>
                     <h3>Cota Ouro</h3>
                     <div class="price-badge">R$ 1.000,00</div>
                     <ul class="feature-list">
-                        <li><i class="fa-solid fa-crown"></i> <strong>Visibilidade Máxima:</strong> Logo destaque e Banner exclusivo.</li>
-                        <li><i class="fa-brands fa-instagram"></i> <strong>Digital:</strong> Post Collab + Destaque Stories.</li>
+                        <li><i class="fa-solid fa-crown"></i> <strong>Visibilidade Máxima:</strong> Logo destaque e Banner.</li>
+                        <li><i class="fa-brands fa-instagram"></i> <strong>Digital:</strong> Post Collab + Destaque.</li>
                         <li><i class="fa-solid fa-trophy"></i> <strong>Símbolo:</strong> Troféu "Parceiro do Reino".</li>
                         <li><i class="fa-solid fa-microphone-lines"></i> <strong>Palco:</strong> Fala ou entrega de prêmio.</li>
                     </ul>
-                    <a href="https://wa.me/5561981968814?text=Olá,%20quero%20garantir%20uma%20das%203%20vagas%20da%20Cota%20Ouro!" target="_blank" class="cota-btn">GARANTIR VAGA</a>
+                    <a href="https://wa.me/5561981968814?text=Olá,%20quero%20patrocinar%20com%20a%20Cota%20Ouro!" target="_blank" class="cota-btn">QUERO PATROCINAR</a>
                 </div>
             </div>
-
             <!-- PRATA -->
-            <div class="cota-card silver reveal">
+            <div class="cota-card silver reverse reveal">
                 <div class="scarcity-badge" style="background: #475569; box-shadow: none;">5 VAGAS</div>
-                <div class="cota-img-container">
-                    <i class="fa-solid fa-award" style="font-size: 120px; color: #e2e8f0;"></i>
-                </div>
+                <div class="cota-img-container"><i class="fa-solid fa-award" style="font-size: 120px; color: #e2e8f0;"></i></div>
                 <div class="cota-info">
                     <h3>Cota Prata</h3>
                     <div class="price-badge">R$ 500,00</div>
                     <ul class="feature-list">
-                        <li><i class="fa-solid fa-star-half-stroke"></i> <strong>Visibilidade:</strong> Logo média no painel.</li>
-                        <li><i class="fa-brands fa-instagram"></i> <strong>Digital:</strong> 1 Post Feed + 1 Story.</li>
+                        <li><i class="fa-solid fa-star-half-stroke"></i> <strong>Visibilidade:</strong> Logo média.</li>
+                        <li><i class="fa-brands fa-instagram"></i> <strong>Digital:</strong> 1 Post + 1 Story.</li>
                         <li><i class="fa-solid fa-bullhorn"></i> <strong>Ao Vivo:</strong> Citação nominal.</li>
                     </ul>
-                    <a href="https://wa.me/5561981968814?text=Olá,%20quero%20a%20Cota%20Prata!" target="_blank" class="cota-btn">QUERO APOIAR</a>
+                    <a href="https://wa.me/5561981968814?text=Olá,%20quero%20patrocinar%20com%20a%20Cota%20Prata!" target="_blank" class="cota-btn">QUERO APOIAR</a>
                 </div>
             </div>
-
             <!-- BRONZE -->
             <div class="cota-card bronze reveal" style="border-color: #d97706;">
                 <div class="scarcity-badge" style="background: #d97706; box-shadow: none;">10 VAGAS</div>
-                <div class="cota-img-container" style="background: radial-gradient(circle, rgba(217,119,6,0.1) 0%, transparent 70%);">
-                    <i class="fa-solid fa-medal" style="font-size: 120px; color: #d97706;"></i>
-                </div>
+                <div class="cota-img-container" style="background: radial-gradient(circle, rgba(217,119,6,0.1) 0%, transparent 70%);"><i class="fa-solid fa-medal" style="font-size: 120px; color: #d97706;"></i></div>
                 <div class="cota-info">
                     <h3 style="color: #d97706;">Cota Bronze</h3>
                     <div class="price-badge" style="border-color: #d97706; color: #d97706;">R$ 300,00</div>
@@ -361,13 +327,11 @@
                         <li><i class="fa-regular fa-star"></i> <strong>Visibilidade:</strong> Logo na lista do telão.</li>
                         <li><i class="fa-brands fa-instagram"></i> <strong>Digital:</strong> Menção na legenda.</li>
                     </ul>
-                    <a href="https://wa.me/5561981968814?text=Olá,%20quero%20a%20Cota%20Bronze!" target="_blank" class="cota-btn">QUERO ENTRAR</a>
+                    <a href="https://wa.me/5561981968814?text=Olá,%20quero%20patrocinar%20com%20a%20Cota%20Bronze!" target="_blank" class="cota-btn">QUERO ENTRAR</a>
                 </div>
             </div>
-
         </div>
-
-        <!-- Apoio Social -->
+        <!-- SOCIAL -->
         <div class="reveal" style="margin-top: 60px; text-align: center; background: rgba(255,255,255,0.02); padding: 30px; border-radius: 15px; width: 100%;">
             <h3 style="color: #fff; font-size: 24px; margin-bottom: 10px;">Apoio Social</h3>
             <p style="margin-bottom: 20px;">Valor livre ou doação de serviços.</p>
@@ -375,24 +339,24 @@
         </div>
     </section>
 
-    <!-- Specs Técnicas -->
+    <!-- ARQUIVOS E TERMO (COM BOTÃO WHATSAPP) -->
     <section id="specs">
-        <h2 class="section-title reveal">Envio de Arquivos</h2>
-        <p class="reveal" style="text-align: center;">Após o fechamento, envie os materiais conforme abaixo.</p>
+        <h2 class="section-title reveal">Formalização e Arquivos</h2>
         <div class="specs-grid reveal">
             <div class="spec-card">
                 <h4><i class="fa-solid fa-image"></i> Logomarca</h4>
-                <ul>
-                    <li>Preferência: Vetor (.AI, .EPS, .SVG)</li>
-                    <li>Aceitamos: PNG fundo transparente (Alta Resolução)</li>
-                </ul>
+                <ul><li>Vetor (.AI, .EPS) ou PNG fundo transparente (Alta Resolução).</li></ul>
             </div>
             <div class="spec-card">
                 <h4><i class="fa-regular fa-clock"></i> Prazos</h4>
-                <ul>
-                    <li>Envio até: <strong>10 de Janeiro</strong></li>
-                    <li>E-mail: voluntarioslagoinhagamadf@gmail.com</li>
-                </ul>
+                <ul><li>Envio até: <strong>10 de Janeiro</strong><br>Email: voluntarioslagoinhagamadf@gmail.com</li></ul>
+            </div>
+            <div class="spec-card">
+                <h4><i class="fa-solid fa-file-contract"></i> Contrato</h4>
+                <ul><li>Solicite o termo pelo WhatsApp, preencha e nos envie assinado.</li></ul>
+                <a href="https://wa.me/5561981968814?text=Olá,%20gostaria%20de%20solicitar%20o%20Termo%20de%20Adesão." target="_blank" class="cota-btn" style="margin-top: 10px; width: 100%; border: none; font-size: 12px; padding: 10px; text-align: center;">
+                    <i class="fa-brands fa-whatsapp"></i> SOLICITAR TERMO
+                </a>
             </div>
         </div>
     </section>
@@ -401,52 +365,26 @@
     <section id="faq">
         <h2 class="section-title reveal">Dúvidas Frequentes</h2>
         <div class="faq-container reveal">
-            <details class="faq-item">
-                <summary>Quais materiais preciso enviar?</summary>
-                <p>Logomarca em alta resolução, artes institucionais, fotos, vídeos (vertical/horizontal) ou artes promocionais.</p>
-            </details>
-            <details class="faq-item">
-                <summary>A igreja cria a arte do meu post?</summary>
-                <p>Não. A equipe da igreja apenas organiza e publica o material enviado pela empresa patrocinadora.</p>
-            </details>
-            <details class="faq-item">
-                <summary>Como funciona a divulgação no Instagram?</summary>
-                <p>No Feed, post institucional com seu material. Nos Stories, usamos seus vídeos/fotos seguindo nosso calendário.</p>
-            </details>
-            <details class="faq-item">
-                <summary>O que acontece após o fechamento?</summary>
-                <p>Enviaremos o cronograma de entrega dos materiais e o calendário previsto para as publicações.</p>
-            </details>
-            <details class="faq-item">
-                <summary>Como realizo o pagamento?</summary>
-                <p>Aceitamos PIX ou transferência bancária. Para cartão de crédito, consulte nossa equipe.</p>
-            </details>
-            <details class="faq-item">
-                <summary>Emitem recibo?</summary>
-                <p>Sim! Emitimos recibo oficial da igreja para fins de comprovação fiscal.</p>
-            </details>
+            <details class="faq-item"><summary>Quais materiais enviar?</summary><p>Logomarca em alta, artes, fotos, vídeos (vertical/horizontal) e artes promocionais.</p></details>
+            <details class="faq-item"><summary>A igreja cria a arte?</summary><p>Não. A equipe organiza e publica o material enviado por você.</p></details>
+            <details class="faq-item"><summary>Como é a divulgação?</summary><p>Post no Feed com sua identidade e Stories conforme o calendário.</p></details>
+            <details class="faq-item"><summary>Pós-fechamento?</summary><p>Enviaremos cronograma de entrega e calendário de publicações.</p></details>
+            <details class="faq-item"><summary>Pagamento?</summary><p>PIX ou transferência. Cartão sob consulta.</p></details>
+            <details class="faq-item"><summary>Nota Fiscal?</summary><p>Sim, emitimos recibo oficial da igreja.</p></details>
         </div>
     </section>
 
-    <!-- Contato -->
+    <!-- CONTATO -->
     <section id="contato">
         <div class="contact-box reveal">
             <h3 style="font-size: 28px; color: #fff;">Fale Conosco</h3>
             <p style="color: var(--gold-primary); margin-bottom: 20px;">Coordenação do Voluntariado</p>
-            
-            <a href="https://wa.me/5561981968814" target="_blank" style="font-size: 22px; color: #fff; text-decoration: none; font-weight: 700;">
-                <i class="fa-brands fa-whatsapp"></i> (61) 98196-8814
-            </a>
-            
-            <a href="https://wa.me/5561981968814?text=Olá,%20quero%20patrocinar!" target="_blank" class="big-cta">
-                <i class="fa-brands fa-whatsapp"></i> GARANTIR MINHA COTA
-            </a>
+            <a href="https://wa.me/5561981968814" target="_blank" style="font-size: 22px; color: #fff; text-decoration: none; font-weight: 700;"><i class="fa-brands fa-whatsapp" style="color: #22c55e; margin-right: 10px;"></i> (61) 98196-8814</a>
+            <a href="https://wa.me/5561981968814?text=Olá,%20quero%20patrocinar!" target="_blank" class="big-cta"><i class="fa-brands fa-whatsapp"></i> GARANTIR MINHA COTA</a>
         </div>
     </section>
 
-    <footer style="text-align: center; padding: 30px; font-size: 12px; color: var(--text-gray); border-top: 1px solid rgba(255,255,255,0.1); background: #020617;">
-        &copy; 2026 Lagoinha Gama.
-    </footer>
+    <footer><p>&copy; 2026 Lagoinha Gama.</p></footer>
 
     <script>
         window.addEventListener('scroll', reveal);
